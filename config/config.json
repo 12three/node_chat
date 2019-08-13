@@ -5,5 +5,8 @@
     "options": {
       "useNewUrlParser": true
     }
+  },
+  "session": {
+    "secret": "KillerIsJim"
   }
 }
