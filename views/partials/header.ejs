@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="/">Main page</a>
+    </li>
+    <% if (user) { %>
+      <li class="nav-item">
+        <a class="nav-link" href="/chat">Chat</a>
+      </li>
+    <% } %>
+  </ul>
+  <ul class="navbar-nav">
+    <% if (user) { %>
+      <li class="nav-item">
+        <a id="logout" class="nav-link" href="">Logout</a>
+      </li>
+    <% } else { %>
+      <li class="nav-item">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+    <% } %>
+  </ul>
+</nav>
+
+<script>
+  $('#logout').on('click', function() {
+    $.post({
+      url: '/logout'
+    })
+  })
+</script>

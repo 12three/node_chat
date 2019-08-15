@@ -20,6 +20,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
     session({
@@ -28,7 +29,7 @@ app.use(
     }),
 );
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('./middleware/loadUser'));
 
 require('./routes')(app);
 

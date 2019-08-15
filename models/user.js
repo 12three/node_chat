@@ -1,5 +1,6 @@
-
+const async = require('async');
 const crypto = require('crypto');
+const AuthError = require('../error').AuthError;
 const mongoose = require('../libs/mongoose'),
   Schema = mongoose.Schema;
 
@@ -41,4 +42,40 @@ schema.methods.checkPassword = function(password) {
   return this.encryptPassword(password) === this.hashedPassword;
 }
 
-exports.User = mongoose.model('User', schema)
+schema.statics.authorize = function(username, password, callback) {
+  const User = this;
+
+  if (!username || !password) {
+      callback(new AuthError('Login and password are required'));
+  }
+
+  async.waterfall(
+    [
+        cb => User.findOne({ username }, cb),
+        (user, cb) => {
+            if (user) {
+                if (user.checkPassword(password)) {
+                    cb(null, user);
+                } else {
+                    cb(new AuthError('Incorrect password'));
+                }
+            } else {
+                const user = new User({
+                    username,
+                    password,
+                });
+
+                user.save(err => {
+                    if (err) return cb(err);
+
+                    cb(null, user);
+                });
+            }
+        },
+    ],
+    callback
+  );
+}
+
+exports.User = mongoose.model('User', schema);
+

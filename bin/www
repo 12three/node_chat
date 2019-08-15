@@ -58,7 +58,8 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof config.get('port') === 'string'
+  var port = config.get('port');
+  var bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
